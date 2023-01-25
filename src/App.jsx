@@ -1,3 +1,4 @@
+import confetti from "canvas-confetti"
 import { useState } from "react"
 
 const TURNS = {
@@ -51,6 +52,10 @@ function App() {
     setTurn(TURNS.X);
   }
   
+  const checkEndGame =  (boardToCheck) => {
+    return boardToCheck.every((square) => square !== null);
+  }
+
   const checkWinner = (boardToCheck) => {
     for (const combo of WINNER_COMBOS) {
       const [a ,b ,c] = combo;
@@ -79,11 +84,10 @@ function App() {
 
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
+      confetti();
       setWinner(newWinner);
       setGameStatus(GAME_STATUS.winner);
-    }
-
-    if (!newWinner && !newBoard.includes(null)) {
+    } else if (checkEndGame(newBoard)) {
       setGameStatus(GAME_STATUS.tie);
     }
     
@@ -95,14 +99,14 @@ function App() {
       <button type="button" onClick={resetGame}>Reiniciar</button>
       <section className="game">
         {
-          board.map((_, index) => {
+          board.map((square, index) => {
             return (
               <Square 
                 key={`square-${index}`}
                 index={index}
                 updateBoard={updateBoard}
               >
-                {board[index]}
+                {square}
               </Square>
             )
           })
