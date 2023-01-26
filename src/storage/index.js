@@ -1,3 +1,4 @@
+// try to separate all the things to improve code
 export function saveGameStorage( {board, turn}) {
  localStorage.setItem('board', JSON.stringify(board));
  localStorage.setItem('turn', JSON.stringify(turn));

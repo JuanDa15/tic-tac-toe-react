@@ -10,6 +10,7 @@ import { resetGameStorage, saveGameStorage } from "./storage";
 function App() {
   
   const [board, setBoard] = useState(() => {
+    // USE FUNCTIONS TO INITIALIZATE STATES, DEPENDING OF A CONDITION 
     const boardFromStorage = localStorage.getItem('board');
     return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null);
   });
@@ -20,6 +21,7 @@ function App() {
     return turnFromStorage ? JSON.parse(turnFromStorage) : TURNS.X;
   });
 
+  
   const resetGame = () => {
     setBoard(Array(9).fill(null));
     setGameStatus(GAME_STATUS.in_game);

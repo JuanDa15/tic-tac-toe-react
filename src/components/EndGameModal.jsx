@@ -2,8 +2,10 @@ import { GAME_STATUS } from "../constants";
 import { Square } from "./Square";
 
 export function EndGameModal({gameStatus, winner, resetGame}) {
+	// CONDITIONAL RENDER
 	if (gameStatus === GAME_STATUS.in_game) return null;
 
+	// CONDITIONAL TEXT
 	const winnerText = (gameStatus === GAME_STATUS.tie) ? 'empate' : (gameStatus === GAME_STATUS.winner) && `El ganador es`;
 
 	return (

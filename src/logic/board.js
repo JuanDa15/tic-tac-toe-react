@@ -1,5 +1,5 @@
 import { WINNER_COMBOS } from "../constants";
-
+// PUT OUT OF THE REACT COMPONENTS THE LOGIC, FUNCTIONS THAT DIDN'T DEPEND OF THE STATE
 export const checkWinner = ( boardToCheck ) => {
  for (const combo of WINNER_COMBOS) {
    const [a ,b ,c] = combo;
