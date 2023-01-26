@@ -2,21 +2,30 @@ import confetti from "canvas-confetti"
 import { useState } from "react"
 import { EndGameModal } from "./components/EndGameModal";
 import { Square } from "./components/Square"
+import { Turns } from "./components/Turns";
 import { GAME_STATUS, TURNS } from "./constants";
 import { checkEndGame, checkWinner } from "./logic/board.js";
+import { resetGameStorage, saveGameStorage } from "./storage";
 
 function App() {
   
-  const [board, setBoard] = useState(Array(9).fill(null));
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = localStorage.getItem('board');
+    return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null);
+  });
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.in_game);
   const [winner, setWinner] = useState(null);
-  const [turn, setTurn] = useState(TURNS.X);
+  const [turn, setTurn] = useState(() => {
+    const turnFromStorage = localStorage.getItem('turn');
+    return turnFromStorage ? JSON.parse(turnFromStorage) : TURNS.X;
+  });
 
   const resetGame = () => {
     setBoard(Array(9).fill(null));
     setGameStatus(GAME_STATUS.in_game);
     setWinner(null);
     setTurn(TURNS.X);
+    resetGameStorage();
   }
   
   const updateBoard = (index) => {
@@ -29,6 +38,11 @@ function App() {
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
+
+    saveGameStorage({
+      board: newBoard,
+      turn: newTurn
+    });
 
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
@@ -60,15 +74,7 @@ function App() {
           })
         }
       </section>
-      <section className="turn">
-        <Square isSelected={turn === TURNS.X}>
-          {TURNS.X}
-        </Square>
-        <Square isSelected={turn === TURNS.O}>
-          {TURNS.O}
-        </Square>
-      </section>
-
+      <Turns turn={turn}/>
       <EndGameModal gameStatus={gameStatus} winner={winner} resetGame={resetGame} />
     </main>
   )
