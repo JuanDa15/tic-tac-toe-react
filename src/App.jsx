@@ -1,5 +1,5 @@
 import confetti from "canvas-confetti"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { EndGameModal } from "./components/EndGameModal";
 import { Square } from "./components/Square"
 import { Turns } from "./components/Turns";
@@ -21,6 +21,12 @@ function App() {
     return turnFromStorage ? JSON.parse(turnFromStorage) : TURNS.X;
   });
 
+  useEffect(() => {
+    saveGameStorage({
+      board: board,
+      turn: turn
+    })
+  }, [turn, board])
   
   const resetGame = () => {
     setBoard(Array(9).fill(null));
@@ -40,11 +46,6 @@ function App() {
 
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
-
-    saveGameStorage({
-      board: newBoard,
-      turn: newTurn
-    });
 
     const newWinner = checkWinner(newBoard);
     if (newWinner) {
